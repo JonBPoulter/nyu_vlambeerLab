@@ -4,4 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/PROCGENHW.unity
+    guid: 5eff98934e59b084eb717afa26f6302e
+  m_configObjects: {}

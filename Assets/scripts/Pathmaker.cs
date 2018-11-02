@@ -16,9 +16,19 @@ public class Pathmaker : MonoBehaviour {
 
 //	DECLARE CLASS MEMBER VARIABLES:
 //	Declare a private integer called counter that starts at 0; 		// counter var will track how many floor tiles I've instantiated
+	private static int Counter = 0;
 //	Declare a public Transform called floorPrefab, assign the prefab in inspector;
+	public Transform[] floorPrefab;
 //	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector; 		// you'll have to make a "pathmakerSphere" prefab later
+	public Transform pathmakerSpeherePrefab;
+	//private float TurnRightCount;
+	Vector3 TileSpawnPos= new Vector3(0,-2,0);
+	private void Start()
+	{
+		//TurnRightCount = Random.Range(0f, .3f);
+		
 
+	}
 
 	void Update () {
 //		If counter is less than 50, then:
@@ -33,6 +43,87 @@ public class Pathmaker : MonoBehaviour {
 //			Increment counter;
 //		Else:
 //			Destroy my game object; 		// self destruct if I've made enough tiles already
+		
+		//Use RayCast to above sphere to make sure that the objects are not instantiated on top of each other
+		Vector3 SpawnPos= transform.position + TileSpawnPos;
+		Ray HitorMiss = new Ray(pathmakerSpeherePrefab.transform.position,Vector3.down);
+		
+			
+		float MaxRayDist = 3f;
+		Debug.DrawRay(HitorMiss.origin,HitorMiss.direction*MaxRayDist,Color.black);
+		bool HitRay = Physics.Raycast(HitorMiss, MaxRayDist);
+		
+		while (Counter < 500)
+		{
+			float Test = Random.Range(0f, 1f);
+			//Debug.Log(Test);
+			if (Test<.3)
+			{
+				Debug.Log("Feel");
+				gameObject.transform.Rotate(0f,90f,0);
+			}
+			else if (Test<.6 && Test>.35)
+			{
+				gameObject.transform.Rotate(0f,-90f,0f);
+				
+			}
+			else if(Test<1f && Test>.90f)
+			{
+				Instantiate(pathmakerSpeherePrefab, transform.position,pathmakerSpeherePrefab.rotation);
+			}
+			
+			
+			
+			
+			 if (HitRay)
+			{
+				Debug.Log("Contact");
+			}
+			else if (!HitRay)
+			 {
+				 int Index = Random.Range(0, floorPrefab.Length);
+				Transform Tile= Instantiate(floorPrefab[Index], SpawnPos, Quaternion.Euler(0f, 0f, 0f));
+				
+				Counter++;
+			}
+			transform.position += transform.forward * 5;
+
+			return;
+
+		}
+
+		if (Counter > 500)
+		{
+			Destroy(gameObject);
+		}
+		
+			//Destroy(gameObject);
+		//Debug.Log("done");
+	/*
+		
+		
+			for (int i = 0; i < 50; i++)
+			{
+				float Test = Random.Range(0f, 1f);
+				if(Test<.25)
+				{
+					transform.Rotate(0f,90f,0f);
+				}
+				else if( Test<.5 && Test>.25)
+				{
+					transform.Rotate(0f,-90f,0f);
+				}
+				else if(Test<1 && Test>.99f)
+				{
+					Instantiate(pathmakerSpeherePrefab, transform.position, transform.rotation);
+				}
+				Instantiate(floorPrefab, transform.position, Quaternion.identity);
+				transform.position =new Vector3(0f,0f,5f);
+				Counter++;
+
+
+			}*/
+		
 	}
 
 } // end of class scope
